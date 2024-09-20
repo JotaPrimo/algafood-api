@@ -1,5 +1,6 @@
 package com.algaworks.algafood.di.notificacao;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,12 @@ import org.springframework.stereotype.Component;
 public class NotificadorProperties {
     private String hostServidor;
     private Integer portaServidor;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("hostServidor : " + getHostServidor());
+        System.out.println("portaServidor : " + getPortaServidor());
+    }
 
     public String getHostServidor() {
         return hostServidor;
