@@ -7,6 +7,7 @@ import com.algaworks.algafood.di.notificacao.TipoDoNotificador;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +17,8 @@ public class AtivacaoClienteService {
     @Autowired
     private Notificador notificador;
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @PostConstruct
     public void init() {
@@ -31,6 +34,6 @@ public class AtivacaoClienteService {
     public void ativar(Cliente cliente) {
         cliente.ativar();
 
-        notificador.notificar(cliente, "Seu cadastro no sistema está ativo!");
+        eventPublisher.publishEvent(new ClienteAtivadoEvent(cliente));
     }
 }
