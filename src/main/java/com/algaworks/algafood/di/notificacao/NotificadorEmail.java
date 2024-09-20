@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 // essa anotação faz com que o spring gerencia estado e injeta esse componente
 // instancia e configura
 
-@Profile("prod")
+@Profile("production")
 @TipoDoNotificador(NivelUrgencia.NORMAL)
 @Component
 public class NotificadorEmail implements Notificador {
