@@ -34,13 +34,13 @@ class EstadoControllerTest {
         // cenario
 
         // ação
-        String jsonResponse = restTemplate.getForObject("http://api.algafood.local:8080/cozinhas", String.class);
-        Estado[] usuarios = objectMapper.readValue(jsonResponse, Estado[].class);
-
+        String jsonResponse = restTemplate.getForObject("http://api.algafood.local:8080/estados", String.class);
+        Estado[] estados = objectMapper.readValue(jsonResponse, Estado[].class);
 
         // assertions
-        assertThat(usuarios).isNotEmpty();
+        assertThat(estados).isNotEmpty();
         assertThat(jsonResponse).isNotNull();
+        assertThat(estados.length).isEqualTo(27);
     }
 
 }
