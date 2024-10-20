@@ -16,7 +16,6 @@ public class Cozinha {
     private Long id;
 
     // é possivel alterar a forma como o nome aparece no json ou xml
-    @JsonProperty("titulo")
     @Column(nullable = false)
     private String nome;
 

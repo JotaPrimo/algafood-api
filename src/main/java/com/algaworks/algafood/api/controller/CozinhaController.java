@@ -16,6 +16,7 @@ import java.util.List;
 public class CozinhaController {
 
     private final CozinhaRepository cozinhaRepository;
+
     private final CadastroCozinhaService cadastroCozinha;
 
     @Autowired
@@ -37,6 +38,14 @@ public class CozinhaController {
         if (cozinha != null) {
             return ResponseEntity.ok(cozinha);
         }
+
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
+        Cozinha cozinhaSave = cozinhaRepository.salvar(cozinha);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cozinhaSave);
     }
 }
