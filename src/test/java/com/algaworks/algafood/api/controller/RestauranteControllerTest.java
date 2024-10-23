@@ -1,7 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
+import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.model.Restaurante;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import utils.HttpUtils;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,11 +82,9 @@ class RestauranteControllerTest {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> entity = HttpUtils.getHttpHeaders();
 
-        String urlInvalida = "http://example.com/restaurantes/9999"; // URL que deve retornar 404
-
         // ação
         Throwable thrown = catchThrowable(() -> {
-            restTemplate.exchange(urlInvalida, HttpMethod.GET, entity, String.class);
+            restTemplate.exchange(URL + "/0", HttpMethod.GET, entity, String.class);
         });
 
         // assertions
@@ -92,5 +93,33 @@ class RestauranteControllerTest {
             HttpClientErrorException ex = (HttpClientErrorException) thrown;
             assertThat(ex.getStatusCode().value()).isEqualTo(404);  // Verifica se o status code é 404
         }
+    }
+
+    @Test
+    void testAdicionarRestauranteComSuccesso_deveRetornarStatus201() throws JsonProcessingException {
+        // cenario
+        Cozinha cozinha = new Cozinha();
+        cozinha.setId(1L);
+        cozinha.setNome("Chilena");
+
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNome("Los Chilenos");
+        restaurante.setTaxaFrete(new BigDecimal(50));
+        restaurante.setCozinha(cozinha);
+
+        HttpEntity<String> entity = HttpUtils.getHttpHeaders();
+
+        // ação
+        ResponseEntity<String> jsonResponse = mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson))
+                .andExpect(status().isOk())
+                .andExpect(content().string("User created successfully"));
+        Restaurante restauranteMapped = objectMapper.readValue(jsonResponse.getBody(), Restaurante.class);
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse.getBody());
+
+        assertThat(jsonResponse.getBody()).isNotEmpty();
+        assertThat(jsonResponse.getBody()).isNotNull();
+        assertThat(jsonNode.has("nome")).isEqualTo("Los Chilenos");
     }
 }

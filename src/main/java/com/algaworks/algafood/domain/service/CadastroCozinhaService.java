@@ -37,4 +37,8 @@ public class CadastroCozinhaService {
             );
         }
     }
+
+    public Cozinha buscar(Long id) {
+        return cozinhaRepository.buscar(id);
+    }
 }
