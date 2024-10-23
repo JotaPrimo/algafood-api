@@ -110,11 +110,7 @@ class RestauranteControllerTest {
         HttpEntity<String> entity = HttpUtils.getHttpHeaders();
 
         // ação
-        ResponseEntity<String> jsonResponse = mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(userJson))
-                .andExpect(status().isOk())
-                .andExpect(content().string("User created successfully"));
+        ResponseEntity<String> jsonResponse = restTemplate.exchange(URL, HttpMethod.POST, entity, String.class);
         Restaurante restauranteMapped = objectMapper.readValue(jsonResponse.getBody(), Restaurante.class);
         JsonNode jsonNode = objectMapper.readTree(jsonResponse.getBody());
 
