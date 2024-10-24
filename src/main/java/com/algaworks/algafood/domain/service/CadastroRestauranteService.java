@@ -28,6 +28,16 @@ public class CadastroRestauranteService {
         return restauranteRepository.buscar(id);
     }
 
+    public Restaurante buscarOuFalhar(Long id) {
+        Restaurante restaurante = restauranteRepository.buscar(id);
+
+        if (restaurante == null) {
+            throw new EntidadeNaoEncontradaException(String.format("Restaurante de id %d não encontrado", id));
+        }
+
+        return restaurante;
+    }
+
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
